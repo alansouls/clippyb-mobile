@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		E700BF2A2F1403120049D871 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E700BF292F1403120049D871 /* CryptoSwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		E7997DF32F12E64800333C08 /* ClippyMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClippyMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E700BF2A2F1403120049D871 /* CryptoSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = ClippyMobile;
 			packageProductDependencies = (
+				E700BF292F1403120049D871 /* CryptoSwift */,
 			);
 			productName = ClippyMobile;
 			productReference = E7997DF32F12E64800333C08 /* ClippyMobile.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = E7997DEA2F12E64800333C08;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				E700BF282F1403120049D871 /* XCLocalSwiftPackageReference "CryptoSwift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E7997DF42F12E64800333C08 /* Products */;
 			projectDirPath = "";
@@ -324,6 +333,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		E700BF282F1403120049D871 /* XCLocalSwiftPackageReference "CryptoSwift" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = CryptoSwift;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E700BF292F1403120049D871 /* CryptoSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = CryptoSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E7997DEB2F12E64800333C08 /* Project object */;
 }

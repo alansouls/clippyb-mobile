@@ -8,8 +8,35 @@
 import SwiftUI
 
 struct HomeView: View {
+    @State private var showError = false
     @State private var dataToSend: String = ""
-    @State private var sentData: String = ""
+    
+    private func getMessagingService() -> MessagingService {
+        AzureServiceBusService(
+            serviceBusName: SettingsRepository.Instance.serviceBusName,
+            serviceBusKeyName: SettingsRepository.Instance.serviceBusKeyName,
+            serviceBusKey: SettingsRepository.Instance.serviceBusKey,
+            queueName: "clippy-queue")
+    }
+    
+    private func sendData() async throws {
+        let messagingService = getMessagingService()
+        let encryptionService = EncryptionService()
+        
+        let encryptedData = try encryptionService.encryptData(data: Data(dataToSend.utf8))
+            .byteArray.toBase64()
+        
+        try await messagingService.send(message: ClippyMessage(source: "Iphone", encryptedData: encryptedData))
+    }
+    
+    private func sendDataHandled() async {
+        do {
+            try await sendData()
+        }
+        catch let error {
+            showError = true
+        }
+    }
     
     var body: some View {
         VStack {
@@ -25,7 +52,9 @@ struct HomeView: View {
             .textFieldStyle(.roundedBorder)
             
             Button(action: {
-                sentData = dataToSend
+                Task {
+                    await sendDataHandled()
+                }
             }, label: {
                 Label(
                     HomeConstants.buttonSendFromFieldText,
@@ -33,9 +62,13 @@ struct HomeView: View {
                 )
             })
             .roundedButton()
+            .alert("Error sending data", isPresented: $showError) {
+                Button("OK", role: .cancel) {
+                    
+                }
+            }
             
             Button(action: {
-                sentData = dataToSend
             }, label: {
                 Label(HomeConstants.buttonSendFromCredentialsText, systemImage: HomeConstants.buttonSendFromCredentialsIcon)
             })

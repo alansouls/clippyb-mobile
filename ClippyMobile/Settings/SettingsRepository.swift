@@ -10,6 +10,8 @@ import Foundation
 class SettingsRepository {
     static let Instance = SettingsRepository()
     
-    var serviceBusConnection = ""
-    var encryptionKey : Data? = nil
+    var serviceBusName = ""
+    var serviceBusKeyName = ""
+    var serviceBusKey = ""
+    var encryptionKeyFileUrl: URL?
 }
