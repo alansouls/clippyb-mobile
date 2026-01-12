@@ -8,10 +8,11 @@
 import SwiftUI
 
 struct HomeView: View {
+    private let messagingService = getMessagingService()
     @State private var showError = false
     @State private var dataToSend: String = ""
     
-    private func getMessagingService() -> MessagingService {
+    static private func getMessagingService() -> MessagingService {
         AzureServiceBusService(
             serviceBusName: SettingsRepository.Instance.serviceBusName,
             serviceBusKeyName: SettingsRepository.Instance.serviceBusKeyName,
@@ -20,7 +21,6 @@ struct HomeView: View {
     }
     
     private func sendData() async throws {
-        let messagingService = getMessagingService()
         let encryptionService = EncryptionService()
         
         let encryptedData = try encryptionService.encryptData(data: Data(dataToSend.utf8))

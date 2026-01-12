@@ -9,6 +9,11 @@ import SwiftUI
 
 @main
 struct ClippyMobileApp: App {
+    
+    init() {
+        SettingsRepository.Instance.restore()
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()

@@ -14,6 +14,9 @@ class AzureServiceBusService : MessagingService {
     let serviceBusKey: String
     let queueName: String
     
+    private var expiresIn: Int?
+    private var sasToken: String?
+    
     init(serviceBusName: String, serviceBusKeyName: String, serviceBusKey: String, queueName: String) {
         self.serviceBusName = serviceBusName
         self.serviceBusKeyName = serviceBusKeyName
@@ -22,21 +25,29 @@ class AzureServiceBusService : MessagingService {
     }
     
     func send(message: ClippyMessage) async throws {
-        let serviceBusUrl = "https://\(serviceBusName).servicebus.windows.net/\(queueName)"
+        let serviceBusUrl = "https://\(serviceBusName).servicebus.windows.net/\(queueName)/"
         // Construct the Service Bus URL
-        let resourceUrl = serviceBusUrl  + "/messages"
+        let resourceUrl = serviceBusUrl  + "messages"
         
         guard let url = URL(string: resourceUrl) else {
             throw ServiceBusError.invalidURL
         }
         
-        // Generate SAS Token
-        let sasToken = try generateSASToken(
-            resourceUrl: serviceBusUrl,
-            keyName: serviceBusKeyName,
-            key: serviceBusKey,
-            expiryInSeconds: 3600 // 1 hour
-        )
+        let now = Int(Date().timeIntervalSince1970)
+        
+        let sasToken = try {
+            if (self.sasToken != nil && self.expiresIn != nil && self.expiresIn! > now) {
+                self.sasToken
+            }
+            else {
+                try self.generateSASToken(
+                    resourceUrl: serviceBusUrl,
+                    keyName: self.serviceBusKeyName,
+                    key: self.serviceBusKey,
+                    expiryInSeconds: 3600 // 1 hour
+                )
+            }
+        }()
         
         // Create the request
         var request = URLRequest(url: url)
@@ -74,29 +85,31 @@ class AzureServiceBusService : MessagingService {
         let expiryString = String(expiry)
         
         // URL encode the resource URL
-        guard let encodedUrl = resourceUrl.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
-            throw ServiceBusError.tokenGenerationFailed
-        }
+        let encodedUrl = resourceUrl.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!.lowercased()
         
         // Create the string to sign
         let stringToSign = "\(encodedUrl)\n\(expiryString)"
+        
+        print(stringToSign)
         
         // Generate HMAC-SHA256 signature
         let signature = try hmacSHA256(string: stringToSign, key: key)
         
         // URL encode the signature
-        guard let encodedSignature = signature.addingPercentEncoding(withAllowedCharacters: . urlQueryAllowed) else {
-            throw ServiceBusError.tokenGenerationFailed
-        }
+        let encodedSignature = signature.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!.replacingOccurrences(of: "=", with: "%3d")
         
         // Construct the SAS token
         let sasToken = "SharedAccessSignature sr=\(encodedUrl)&sig=\(encodedSignature)&se=\(expiryString)&skn=\(keyName)"
+        
+        self.sasToken = sasToken
+        self.expiresIn = expiry
         
         return sasToken
     }
     
     private func hmacSHA256(string: String, key: String) throws -> String {
-        try  HMAC(key: Array(key.utf8)).authenticate(Array(string.utf8)).toBase64()
+        try  HMAC(key: key.bytes, variant: .sha2(.sha256))
+            .authenticate(string.bytes).toBase64()
     }
 }
 

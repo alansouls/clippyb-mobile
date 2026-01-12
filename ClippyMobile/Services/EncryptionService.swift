@@ -11,7 +11,11 @@ import Foundation
 class EncryptionService {
     
     private func loadEncryptionKey(fileUrl: URL) throws -> Data  {
-        try NSData(contentsOf: fileUrl) as Data
+        let success = fileUrl.startAccessingSecurityScopedResource()
+        let fileData = try NSData(contentsOf: fileUrl) as Data
+        fileUrl.stopAccessingSecurityScopedResource()
+        
+        return fileData
     }
     
     func encryptData(data: Data) throws -> Data {

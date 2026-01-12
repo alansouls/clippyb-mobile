@@ -17,6 +17,10 @@ struct SettingsView: View {
     @State var encryptionKeyFileName = ""
     @State var encryptionKeyFileUrl : URL?
     
+    init() {
+        cancelSettings()
+    }
+    
     func saveSettings() {
         SettingsRepository.Instance.serviceBusName = serviceBusName
         SettingsRepository.Instance.serviceBusKeyName = serviceBusKeyName
@@ -24,6 +28,7 @@ struct SettingsView: View {
         SettingsRepository.Instance.encryptionKeyFileUrl =
             encryptionKeyFileUrl
         changed = false
+        SettingsRepository.Instance.persist()
     }
     
     func cancelSettings() {
