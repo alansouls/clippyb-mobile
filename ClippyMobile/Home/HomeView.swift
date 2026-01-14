@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
+import AuthenticationServices
 
 struct HomeView: View {
     private let messagingService = getMessagingService()
     @State private var showError = false
     @State private var dataToSend: String = ""
+    @State private var showPasswordSelector = false
     
     static private func getMessagingService() -> MessagingService {
         AzureServiceBusService(
@@ -20,22 +22,26 @@ struct HomeView: View {
             queueName: "clippy-queue")
     }
     
-    private func sendData() async throws {
+    private func sendData(data: String) async throws {
         let encryptionService = EncryptionService()
         
-        let encryptedData = try encryptionService.encryptData(data: Data(dataToSend.utf8))
+        let encryptedData = try encryptionService.encryptData(data: Data(data.utf8))
             .byteArray.toBase64()
         
         try await messagingService.send(message: ClippyMessage(source: "Iphone", encryptedData: encryptedData))
     }
     
-    private func sendDataHandled() async {
+    private func sendDataHandled(data: String) async {
         do {
-            try await sendData()
+            try await sendData(data: data)
         }
-        catch let error {
+        catch {
             showError = true
         }
+    }
+    
+    private func requestCredentials() {
+        showPasswordSelector = true
     }
     
     var body: some View {
@@ -53,7 +59,7 @@ struct HomeView: View {
             
             Button(action: {
                 Task {
-                    await sendDataHandled()
+                    await sendDataHandled(data: dataToSend)
                 }
             }, label: {
                 Label(
@@ -69,12 +75,20 @@ struct HomeView: View {
             }
             
             Button(action: {
+                requestCredentials()
             }, label: {
                 Label(HomeConstants.buttonSendFromCredentialsText, systemImage: HomeConstants.buttonSendFromCredentialsIcon)
             })
             .roundedButton()
         }
         .defaultStyle()
+        .sheet(isPresented: $showPasswordSelector, content: {
+            PasswordSelectorModal(isPresented: $showPasswordSelector) { password in
+                Task {
+                    try await sendDataHandled(data: password)
+                }
+            }
+        })
     }
 }
 
