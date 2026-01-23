@@ -9,15 +9,38 @@ import Foundation
 import SwiftUI
 
 extension Button {
-    func roundedButton() -> some View {
+    func primaryButton() -> some View {
         self
             .background {
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .stroke(.buttonBackground, lineWidth: 5)
+                RoundedRectangle(cornerRadius: 30)
+                    .fill(.appPrimary)
             }
             .bold()
-            .foregroundColor(.buttonText)
+            .foregroundStyle(.primary)
+            .foregroundColor(.white)
             .buttonStyle(.bordered)
-            .clipShape(Capsule())
+            .frame(minWidth: 50)
+            .cornerRadius(30)
+            .shadow(color: .black.opacity(0.25), radius: 6, x: 0, y: 4)
+
     }
+}
+
+extension Label {
+    func defaultButtonLabel() -> some View {
+        self
+            .font(.body)
+            .padding(.horizontal, 40)
+            .padding(.vertical, 10)
+    }
+}
+
+#Preview {
+    Button(action: {
+        
+    },label: {
+        Label("Send", systemImage: "")
+            .defaultButtonLabel()
+    })
+    .primaryButton()
 }

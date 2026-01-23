@@ -66,8 +66,9 @@ struct HomeView: View {
                     HomeConstants.buttonSendFromFieldText,
                     systemImage: HomeConstants.buttonSendFromFieldIcon
                 )
+                .defaultButtonLabel()
             })
-            .roundedButton()
+            .primaryButton()
             .alert("Error sending data", isPresented: $showError) {
                 Button("OK", role: .cancel) {
                     
@@ -78,14 +79,15 @@ struct HomeView: View {
                 requestCredentials()
             }, label: {
                 Label(HomeConstants.buttonSendFromCredentialsText, systemImage: HomeConstants.buttonSendFromCredentialsIcon)
+                    .defaultButtonLabel()
             })
-            .roundedButton()
+            .primaryButton()
         }
         .defaultStyle()
         .sheet(isPresented: $showPasswordSelector, content: {
             PasswordSelectorModal(isPresented: $showPasswordSelector) { password in
                 Task {
-                    try await sendDataHandled(data: password)
+                    await sendDataHandled(data: password)
                 }
             }
         })

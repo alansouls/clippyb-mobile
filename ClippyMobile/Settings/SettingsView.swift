@@ -87,7 +87,7 @@ struct SettingsView: View {
                     encryptionKeyFileName
                     Label(label, systemImage: "folder")
                 })
-                .roundedButton()
+                .primaryButton()
                 .fileImporter(isPresented: $selectingKey, allowedContentTypes: [UTType(filenameExtension: "bin")!], onCompletion: onKeyFileSelected)
                 .onChange(of: encryptionKeyFileUrl, onEncryptionKeyFileUrlChanged)
             } label: {
@@ -101,12 +101,12 @@ struct SettingsView: View {
                     Button(action: saveSettings, label: {
                         Label(SettingsConstants.buttonSaveSettingsTitle, systemImage: "checkmark")
                     })
-                    .roundedButton()
+                    .primaryButton()
                     
                     Button(action: cancelSettings, label: {
                         Label(SettingsConstants.buttonCancelSettingsChangeTitle, systemImage: "xmark")
                     })
-                    .roundedButton()
+                    .primaryButton()
                 }
             }
         }
