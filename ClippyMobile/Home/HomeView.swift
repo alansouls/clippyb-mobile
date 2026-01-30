@@ -13,6 +13,7 @@ struct HomeView: View {
     @State private var showError = false
     @State private var dataToSend: String = ""
     @State private var showPasswordSelector = false
+    @State private var fieldType: UITextContentType? = nil
     
     static private func getMessagingService() -> MessagingService {
         AzureServiceBusService(
@@ -47,15 +48,13 @@ struct HomeView: View {
     var body: some View {
         VStack {
             Text(HomeConstants.pageTitle)
-                .font(.title)
+                .defaultStyle(.title)
             
             Spacer()
                 .frame(height: 100)
             
-            TextField(HomeConstants.textFieldSendText,
-                  text: $dataToSend
+            AppTextField(placeholder: fieldType == .password ? HomeConstants.textFieldSendText : HomeConstants.textFieldSendText.capitalized, value: $dataToSend, label: nil, contentType: fieldType
             )
-            .textFieldStyle(.roundedBorder)
             
             Button(action: {
                 Task {
@@ -63,8 +62,8 @@ struct HomeView: View {
                 }
             }, label: {
                 Label(
-                    HomeConstants.buttonSendFromFieldText,
-                    systemImage: HomeConstants.buttonSendFromFieldIcon
+                    HomeConstants.buttonSend,
+                    systemImage: ""
                 )
                 .defaultButtonLabel()
             })
@@ -74,14 +73,6 @@ struct HomeView: View {
                     
                 }
             }
-            
-            Button(action: {
-                requestCredentials()
-            }, label: {
-                Label(HomeConstants.buttonSendFromCredentialsText, systemImage: HomeConstants.buttonSendFromCredentialsIcon)
-                    .defaultButtonLabel()
-            })
-            .primaryButton()
         }
         .defaultStyle()
         .sheet(isPresented: $showPasswordSelector, content: {

@@ -14,9 +14,22 @@
 		E7997DF32F12E64800333C08 /* ClippyMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClippyMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		2CF16F102F2D4EC400033445 /* Exceptions for "ClippyMobile" folder in "ClippyMobile" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = E7997DF22F12E64800333C08 /* ClippyMobile */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		E7997DF52F12E64800333C08 /* ClippyMobile */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				2CF16F102F2D4EC400033445 /* Exceptions for "ClippyMobile" folder in "ClippyMobile" target */,
+			);
 			path = ClippyMobile;
 			sourceTree = "<group>";
 		};
@@ -266,6 +279,7 @@
 				DEVELOPMENT_TEAM = 75J5XQFZWT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ClippyMobile/Info.plist;
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "We need to access your credentials to send them to the clipboard";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -299,6 +313,7 @@
 				DEVELOPMENT_TEAM = 75J5XQFZWT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ClippyMobile/Info.plist;
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "We need to access your credentials to send them to the clipboard";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

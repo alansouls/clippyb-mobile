@@ -10,11 +10,7 @@ import Foundation
 struct HomeConstants {
     static let pageTitle = "Home"
     
-    static let textFieldSendText = "Send text"
+    static let textFieldSendText = "Enter text"
     
-    static let buttonSendFromFieldText = "Send from text field"
-    static let buttonSendFromFieldIcon = "clipboard.fill"
-    
-    static let buttonSendFromCredentialsText = "Send a credential"
-    static let buttonSendFromCredentialsIcon = "lock"
+    static let buttonSend = "Send"
 }
